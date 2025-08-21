@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "Gephipy"
+version = "0.0.1"
+description = "A wrapper of Gephi toolkit for Python"
+authors = ["OuestWare <contact@ouestware.com>"]
+readme = "README.md"
+license="MIT"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+JPype1 = "^1.6.0"
+networkx = "^3.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
