@@ -20,7 +20,7 @@ jobs:
           echo "PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
 
       - name: Install dependencies with Poetry
-        run: poetry install --with dev
+        run: poetry install
 
       - name: Build
         run: poetry build
