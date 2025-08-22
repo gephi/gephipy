@@ -8,12 +8,11 @@ It provides helpers to easy the use of Gephy toolkit for Pythonist, even if you 
 
 * Install the lib `pip install gephipy`
 
-* Initialize the GephiPy context
+* Import gephipy
 
 ```python
 from gephipy import gephipy
 
-gephipy.initialize()
 ```
 
 Then you can use the Gephi toolkit or the GephiPy features.
@@ -22,12 +21,17 @@ Then you can use the Gephi toolkit or the GephiPy features.
 
 ```python
 from gephipy import gephipy
-from org.gephi.statistics.plugin import Modularity, GraphDistance
 
-#
-# Init context
-#
-gephipy.initialize()
+# Java imports must be after the gephipy import
+from org.gephi.layout.plugin.forceAtlas2 import ForceAtlas2Builder
+from org.gephi.layout.plugin.random import Random
+from org.gephi.layout.plugin.noverlap import NoverlapLayoutBuilder
+from org.gephi.statistics.plugin import Modularity, GraphDistance
+from org.openide.util import Lookup
+from org.gephi.appearance.api import AppearanceController
+from org.gephi.appearance.plugin import RankingNodeSizeTransformer, PartitionElementColorTransformer
+from org.gephi.appearance.plugin.palette import PaletteManager
+from org.gephi.statistics.plugin import GraphDistance, Modularity
 
 #
 # Create a workspace

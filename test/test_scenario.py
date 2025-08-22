@@ -1,8 +1,10 @@
 import pytest
+from pathlib import Path
+import networkx as nx
 
 from gephipy import gephipy 
 
-import networkx as nx
+# Must be imported after gephipy
 from org.gephi.layout.plugin.forceAtlas2 import ForceAtlas2Builder
 from org.gephi.layout.plugin.random import Random
 from org.gephi.layout.plugin.noverlap import NoverlapLayoutBuilder
@@ -13,16 +15,15 @@ from org.gephi.appearance.plugin import RankingNodeSizeTransformer, PartitionEle
 from org.gephi.appearance.plugin.palette import PaletteManager
 from org.gephi.statistics.plugin import GraphDistance, Modularity
 
+
 def test_scenario(): 
-  
   #
   # Create a workspace
   #
   workspace = gephipy.create_workspace()
 
-  #
+  
   # Create a random graph with NetworkX
-  #
   graphX = nx.erdos_renyi_graph(500,0.01)
   gephipy.networkx_to_gephi(workspace, graphX)
   graphModel = gephipy.get_graph_model(workspace)
@@ -65,7 +66,6 @@ def test_scenario():
   partition.setColors(graphModel.getGraph(), palette.getColors())
   appearanceController.transform(colorPartition)
 
-
   #
   # Run Layouts
   #
@@ -94,5 +94,18 @@ def test_scenario():
   #
   # Export your graph
   #
-
-  gephipy.export_gexf(workspace, "my-gephi-graph.gexf")
+  gephipy.export_gexf(workspace, "test-export-graph.gexf")
+  file = Path("./test-export-graph.gexf")
+  assert file.is_file() == True
+    
+  gephipy.export_svg(workspace, "test-export-graph.svg")
+  file = Path("./test-export-graph.svg")
+  assert file.is_file() == True
+    
+  gephipy.export_pdf(workspace, "test-export-graph.pdf")
+  file = Path("./test-export-graph.pdf")
+  assert file.is_file() == True
+    
+  gephipy.export_png(workspace, "test-export-graph.png")
+  file = Path("./test-export-graph.png")
+  assert file.is_file() == True
