@@ -2,7 +2,7 @@ import pytest
 from pathlib import Path
 import networkx as nx
 
-from gephipy import gephipy 
+from gephipy import gephipy
 
 # Must be imported after gephipy
 from org.gephi.layout.plugin.forceAtlas2 import ForceAtlas2Builder
@@ -79,11 +79,15 @@ def test_scenario():
 
   # FA2 layout
   fa2 = ForceAtlas2Builder().buildLayout()
-  fa2.setGraphModel(gephipy.get_graph_model(workspace))
+  fa2.setGraphModel(graphModel)
   fa2.resetPropertiesValues()
   fa2.initAlgo()
   for x in range(1000):
-    fa2.goAlgo()
+      if fa2.canAlgo():
+          fa2.goAlgo()
+      else:
+          break
+  fa2.endAlgo()
 
   # Noverlap layout
   noverlap = NoverlapLayoutBuilder().buildLayout()
@@ -105,8 +109,9 @@ def test_scenario():
   gephipy.export_pdf(workspace, "test-export-graph.pdf")
   file = Path("./test-export-graph.pdf")
   assert file.is_file() == True
-    
+  
   # PNG requires a display ?
   # gephipy.export_png(workspace, "test-export-graph.png")
   # file = Path("./test-export-graph.png")
   # assert file.is_file() == True
+  
