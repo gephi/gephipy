@@ -2,7 +2,7 @@
 name = "Gephipy"
 version = "0.0.1"
 description = "A wrapper of Gephi toolkit for Python"
-authors = ["OuestWare <contact@ouestware.com>"]
+authors = ["Gephi <contact@gephi.org>"]
 readme = "README.md"
 license="MIT"
 
@@ -10,6 +10,9 @@ license="MIT"
 python = "^3.11"
 JPype1 = "^1.6.0"
 networkx = "^3.5"
+
+[tool.poetry.group.test.dependencies]  
+pytest = "^8.2.0"  
 
 [build-system]
 requires = ["poetry-core"]
