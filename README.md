@@ -2,7 +2,14 @@
 
 This project is Python wrapper of [Gephi toolkit](https://gephi.org/toolkit/), thanks to [Jpype](https://www.jpype.org) which does the bindings between Java and Python.
 
-It provides helpers to easy the use of Gephy toolkit for Pythonist, even if you still ned to know the Java API.
+It provides helpers to easy the use of Gephy toolkit for Pythonist, even if you still need to know the Java API.
+
+## Why this project
+
+This project can be especially useful in Jupyter notebooks to export your graphs in SVG, PDF, or PNG formats. While algorithms and computations can be handled with [NetworkX](https://networkx.org), it lacks the high-quality rendering capabilities needed for publication, which Gephi has and is designed for. 
+
+Moreover, it allows you to create a Gephi pipeline, which is useful when you need to generate the same type of map multiple times but with different data.
+ 
 
 ## How to use 
 
