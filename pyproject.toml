@@ -10,6 +10,7 @@ license="MIT"
 python = "^3.11"
 JPype1 = "^1.6.0"
 networkx = "^3.5"
+tqdm = "^4.67.1"
 
 [tool.poetry.group.test.dependencies]  
 pytest = "^8.2.0"  
