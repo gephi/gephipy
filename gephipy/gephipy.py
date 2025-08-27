@@ -2,9 +2,14 @@ import jpype
 import jpype.imports
 import networkx as nx
 
+import inspect
+from tqdm import tqdm
+from functools import lru_cache
 # Starting the JVM
 from gephipy import jvm
-jvm.start()
+
+if not jpype.isJVMStarted():
+    jvm.start()
 
 # Java import
 from java.io import File
@@ -14,6 +19,8 @@ from org.gephi.project.api import ProjectController
 from org.gephi.io.processor.plugin import DefaultProcessor
 from org.gephi.io.exporter.api import ExportController
 from org.gephi.io.importer.api import ImportController, EdgeDirectionDefault
+from org.gephi.layout.spi import LayoutBuilder
+from typing import Union
 
 #
 # Create a new Gephi workspace
@@ -123,3 +130,79 @@ def export_png(workspace, file_path="./graph.png"):
   png = export.getExporter("png")
   png.setWorkspace(workspace)
   export.exportFile(File(file_path), png)
+
+@lru_cache(1)
+def get_available_layouts():
+  """
+    Dictonary of available Layout
+  """
+  return {str(layout.getName()).strip():layout for layout in Lookup.getDefault().lookupAll(LayoutBuilder)}
+
+# Context Class to ease Layout usage
+class Layout:
+  class _LayoutInstance():
+    """
+      Internal Layout Class that offers run() or pass the method call to the underlying 
+      class instance
+    """
+    def __init__(self,instance,log_progress:bool):
+      self.instance = instance
+      self.log_progress = log_progress
+    
+
+    @lru_cache(1)
+    def _inspect(self):
+      """
+        Inspect utils tool to fetch existing method for the class
+      """
+      return dict(inspect.getmembers(self.instance))
+    
+    def run(self, step=1):
+      """
+        Perform a run of the layout within given steps.
+        It's a pure wrapper function to ease usage of Layout.
+      """
+
+      loop = range(step)
+
+      if self.log_progress: # Could be useful, especially for jupyter folks to keep track of the algo status
+        loop = tqdm(loop,desc=f"Running {self.instance}")
+      for _ in loop:
+        if self.instance.canAlgo():
+          self.instance.goAlgo()
+        else:
+          break
+
+    def __getattr__(self, name: str):
+        """
+          If other attributes or method are call, passing the invokation to underlying instance
+        """
+        return self._inspect()[name]
+  
+  def __init__(self,layout:Union[jpype.JClass, str], graphModel, log_progress=False):
+    """
+      When creating the object
+    """
+    if isinstance(layout,str):
+      available_layouts = get_available_layouts()
+      _layout = available_layouts.get(layout)
+      if _layout is None:
+        raise Exception(f"Invalid Layout name {layout}, available layout are : {', '.join(available_layouts.keys())} ")
+    else:
+      _layout = layout
+    self.layout_instance = Layout._LayoutInstance(_layout.buildLayout(), log_progress)
+    self.layout_instance.setGraphModel(graphModel)
+  
+  def __enter__(self):
+    """
+      Entering the context (with ... as ...)
+    """
+    self.layout_instance.resetPropertiesValues()
+    self.layout_instance.initAlgo()
+    return self.layout_instance
+  
+  def __exit__(self,tp,e,traceback):
+    """
+      Exiting context
+    """
+    self.layout_instance.endAlgo()

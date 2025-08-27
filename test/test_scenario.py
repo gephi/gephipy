@@ -77,17 +77,9 @@ def test_scenario():
   random.goAlgo()
   random.endAlgo()
 
-  # FA2 layout
-  fa2 = ForceAtlas2Builder().buildLayout()
-  fa2.setGraphModel(graphModel)
-  fa2.resetPropertiesValues()
-  fa2.initAlgo()
-  for x in range(1000):
-      if fa2.canAlgo():
-          fa2.goAlgo()
-      else:
-          break
-  fa2.endAlgo()
+
+  with gephipy.Layout("ForceAtlas 2",graphModel=graphModel,log_progress=True) as layout:
+    layout.run(1000)
 
   # Noverlap layout
   noverlap = NoverlapLayoutBuilder().buildLayout()
