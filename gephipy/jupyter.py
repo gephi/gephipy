@@ -23,4 +23,4 @@ def display_svg(file_path, width="100%", height="500px"):
     </script>
   """
 
-  HTML(html_code)
+  return HTML(html_code)
