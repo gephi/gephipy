@@ -78,7 +78,7 @@ def test_scenario():
   random.endAlgo()
 
 
-  with gephipy.Layout("Force Atlas 2",graphModel=graphModel,log_progress=True) as layout:
+  with gephipy.Layout("ForceAtlas 2",graphModel=graphModel,log_progress=True) as layout:
     layout.run(1000)
 
   # Noverlap layout
