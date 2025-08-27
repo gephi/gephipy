@@ -136,7 +136,7 @@ def get_available_layouts():
   """
     Dictonary of available Layout
   """
-  return {str(layout.getName()):layout for layout in Lookup.getDefault().lookupAll(LayoutBuilder)}
+  return {str(layout.getName()).strip():layout for layout in Lookup.getDefault().lookupAll(LayoutBuilder)}
 
 # Context Class to ease Layout usage
 class Layout:
